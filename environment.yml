@@ -1,0 +1,13 @@
+name: myEnv
+channels: 
+  - defaults
+  - pytorch 
+dependencies: 
+  - python=3.12
+  - huggingface_hub
+  - scikit-learn
+  - fastapi
+  - uvicorn
+  - pip
+  - pip: 
+    - -r requirements.txt
