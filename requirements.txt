@@ -4,3 +4,6 @@ transformers>=4.0.0
 accelerate
 fastapi
 streamlit
+pylatex
+pdf2image
+pdfLaTex
