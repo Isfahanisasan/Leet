@@ -1,5 +1,10 @@
 import transformers
 import torch
+from huggingface_hub import login
+
+
+
+login("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")
 
 class LLMgenerator: 
     def __init__(self, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):

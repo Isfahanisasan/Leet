@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2cm;
+        }
+        .header {
+            display: block;
+            position: -webkit-sticky; /* Safari */
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1000;
+            text-align: center;
+        }
+        .header img {
+            height: 2.5cm;
+            width: 2.5cm;
+            display: block;
+            margin: 0 auto;
+        }
+        .header table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .header th, .header td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        .header th {
+            background-color: #f2f2f2;
+        }
+        .confidential {
+            text-align: center;
+            font-size: small;
+            margin-top: 20px;
+            color: red;
+        }
+        .page-number {
+            text-align: center;
+            font-size: small;
+            margin-top: 20px;
+        }
+        @media print {
+            .header {
+                position: static;
+                top: 0;
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <table>
+            <td rowspan="4"> <img src="https://upload.wikimedia.org/wikipedia/en/5/50/Edwards_Lifesciences_logo.png" alt="Edwards Lifesciences Logo"> </td>
+
+            <tr>
+                <td>Revision Date: </td>
+                <td>Rev</td>
+                <td>Version#</td>
+                <td class="warning">For Use Only by Affiliates of Edwards Lifesciences </td>
+                <td>Page: 1 of 1</td>
+
+            </tr>
+            <tr>
+                <td colspan="2">Title: </td>
+                <td colspan="3">title _placeholder</td>
+
+            </tr>
+        </table>
+    </div>
+
+    <h1>Vision</h1>
+
+    <div class="confidential">
+        THIS DOCUMENT CONTAINS CONFIDENTIAL AND PROPRIETARY INFORMATION OF EDWARDS LIFESCIENCES, LLC. IT MUST NOT BE REPRODUCED OR DISCLOSED TO THIRD PARTIES WITHOUT PRIOR WRITTEN PERMISSION OF EDWARDS LIFESCIENCES, LLC.
+    </div>
+</body>
+</html>

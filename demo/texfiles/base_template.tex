@@ -1,34 +1,13 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
-\usepackage{array}
-\usepackage{lastpage}
-\usepackage{lipsum}
-\usepackage{boldline} 
-\usepackage{tabularx, colortbl}
 \usepackage{fancyhdr}
-\usepackage{xltabular}
-\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[hmargin=2cm,top=5.5cm,headheight=130pt,footskip=55pt]{geometry}
-\usepackage{amsthm}
-\usepackage[version=4]{mhchem}
+\usepackage{xcolor}
+\usepackage{lastpage}
 
-\theoremstyle{definition}
-\newtheorem{theorem}{REQ}
-
-
-\newcount\savedtheorem
-%\stepcounter{theorem}
-\newenvironment{subtheorems}{%
-  \savedtheorem=\value{theorem}%
-  \edef\prevthetheorem{\thetheorem}%
-  \setcounter{theorem}{0}%
-  \renewcommand\thetheorem{\prevthetheorem.\arabic{theorem}}%
-}
-{%
-  \setcounter{theorem}{\savedtheorem}%
-}
+\definecolor{gray}{cmyk}{0.05,0.05,0.05,0.05}
 
 \renewcommand{\familydefault}{\sfdefault}
 
@@ -38,14 +17,6 @@
     filecolor=magenta,      
     urlcolor=cyan,
 }
-\newcounter{teststepctr}
-
-
-\definecolor{gray}{cmyk}{0.05,0.05,0.05,0.05}
-
-\urlstyle{same}
-
-%\setlength{\parindent}{4cm}
 
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
@@ -56,9 +27,9 @@
           \end{flushleft}
           \bgroup
           \def\arraystretch{1.5}% 
-          \begin{tabular}{V{4}l|l|l|lV{4}}
-            \hlineB{4}
-            \multicolumn{4}{V{4}cV{4}}{
+          \begin{tabular}{|l|l|l|l|}
+            \hline
+            \multicolumn{4}{|c|}{
                 \textbf{Title: title\_placeholder}
             } \\ 
             \hline
@@ -66,7 +37,7 @@
             {\footnotesize Author: author\_placeholder} &
             {\footnotesize Version: 1} & 
             {\footnotesize Page: \thepage \hspace{1pt} of \pageref*{LastPage}} \\ 
-            \hlineB{4}
+            \hline
           \end{tabular}%
           \egroup
 }
@@ -76,7 +47,5 @@ WRITTEN PERMISSION OF EDWARDS LIFESCIENCES, LLC. }}
 \begin{document}
 
 \section{Vision}
-
-
 
 \end{document}
