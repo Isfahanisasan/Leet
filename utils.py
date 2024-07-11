@@ -29,7 +29,10 @@ def addSectionAndContent(dom, section, content):
     tree = parseDom(dom)
     # check if the section title already exists
     potential_sections = tree.xpath('//h1[text()="{section}"]')  
-    
+
+    if len(potential_sections) > 0:
+        
+
 
 
 

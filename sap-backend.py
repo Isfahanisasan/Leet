@@ -25,7 +25,10 @@ async def generate_template():
 @app.post('/populateSection')
 async def generate_query(request: SectionContentGeneration):
     # send the query to LLM with converted 
-    
+    headers = {'Content-Type': 'application/json'}
+    query = "For the " + request.section + " section, " + request.query + "."
+    response = requests.post(LLM_ENDPOINT, json={"query": query, "priority": 1}, headers=headers) 
+    return response.json()
 
 
 if __name__ == "__main__":

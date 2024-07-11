@@ -11,8 +11,13 @@
 }
 
 #generate-template-button {
-  height: 50px; 
-  width: 100px; 
   display: flex; 
+}
 
+#editor{
+  width: 8.5in; /* Width of a letter-sized page */
+  height: 11in; /* Height of a letter-sized page */
+  border: 1px solid black; /* Solid black border */
+  box-sizing: border-box; /* Include border in the total width and height */
+  overflow: auto;
 }
