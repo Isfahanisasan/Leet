@@ -18,7 +18,7 @@ import Alert from 'editorjs-alert';
 const TOC = require('@phigoro/editorjs-toc');
 const EJLaTex = require('editorjs-latex');
 // const FontFamily = require('editorjs-inline-font-family-tool');
-
+const LLM_END_POINT = "http://localhost:8000/query"
 const Editor = forwardRef((props, ref) => {
     const editorRef = useRef(null);
 
@@ -51,19 +51,19 @@ const Editor = forwardRef((props, ref) => {
                     config: {
                       // here you need to provide your own suggestion provider (e.g., request to your backend)
                       // this callback function must accept a string and return a Promise<string>
-                      callback: (text) => {
-                        return new Promise(resolve => {
-                          setTimeout(() => {
-                            resolve('AI: ' + text)
-                          }, 1000)
-                        })
-                      },
-
-
                     //   callback: (text) => {
-                    //     const myResponse = generateResponse(text); 
-                    //     return Promise.resolve(myResponse);
+                    //     return new Promise(resolve => {
+                    //       setTimeout(() => {
+                    //         resolve('AI: ' + text)
+                    //       }, 1000)
+                    //     })
                     //   },
+
+
+                      callback: (text) => {
+                        const myResponse = generateResponse(text); 
+                        return Promise.resolve(myResponse);
+                      },
                     }
                   },
                 Marker: {
@@ -137,6 +137,20 @@ const Editor = forwardRef((props, ref) => {
             
         };
     }, [props.initialData]);
+
+    const generateResponse = async (text) => {
+        const response = await fetch(LLM_END_POINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query: text, priority: 1})
+        });
+
+        const data = await response.json();
+        console.log(data);
+        return data.response.content;
+    }
 
     return <div id="editorjs" ref={editorRef}></div>;
 });

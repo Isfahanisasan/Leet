@@ -4,9 +4,21 @@ from typing import Dict, Any
 import asyncio
 import heapq
 from LLMgenerator import LLMgenerator
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI() 
+
+
+# Configure CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow requests from any origin
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],  # Allow OPTIONS method
+    allow_headers=["*"],
+)
+
 
 llm_generator = LLMgenerator()
 
@@ -36,6 +48,7 @@ class QueryRequestSchema(BaseModel):
 # one for each solution
 @app.post("/query")
 async def handle_query(request: QueryRequestSchema):
+    print(request)
     async with condition: 
         queue.push(request, request.priority)
         condition.notify()
