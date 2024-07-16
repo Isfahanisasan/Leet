@@ -36,7 +36,9 @@
   "devDependencies": {
     "@editorjs/warning": "^1.4.0",
     "editorjs-change-case": "^0.0.3",
+    "editorjs-drag-drop": "^1.1.14",
     "editorjs-inline-font-family-tool": "^1.0.4",
+    "editorjs-inline-template": "^1.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",

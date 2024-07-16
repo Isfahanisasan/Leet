@@ -4,6 +4,7 @@ from huggingface_hub import login
 
 
 
+
 login("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")
 
 class LLMgenerator: 
@@ -38,7 +39,7 @@ class LLMgenerator:
 
         outputs = self.pipeline(
             self.messages,
-            max_new_tokens=256,
+            max_new_tokens=100,
             eos_token_id=terminators,
             # uses schotastic sampling, no greedy 
             do_sample=True,
@@ -52,6 +53,7 @@ class LLMgenerator:
 
 if __name__ == "__main__":
     llama_gen = LLMgenerator()
+    # for prompt engineering, use role "system" to provide instructions to the model
     llama_gen.set_messages([
         {"role": "system",
         "content": "You are a medical devices corporate chatbot who always responds in scientific plain English. Be concise."}
