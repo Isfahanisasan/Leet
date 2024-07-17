@@ -14,6 +14,8 @@ import Warning from '@editorjs/warning';
 import Alert from 'editorjs-alert';
 import TemplateInlineTool from 'editorjs-inline-template';
 import inlineAI from '../components/inlineAI';
+import NestedList from '@editorjs/nested-list';
+
 
 // import NoticeTune from 'editorjs-notice';
 
@@ -39,8 +41,12 @@ const Editor = forwardRef((props, ref) => {
                     class: Header,
                     inlineToolbar: true
                 },
-                list: {
-                    class: List,
+                // list: {
+                //     class: List,
+                //     inlineToolbar: true
+                // }, 
+                nested_list: {
+                    class: NestedList,
                     inlineToolbar: true
                 }, 
                 table: {
@@ -77,12 +83,6 @@ const Editor = forwardRef((props, ref) => {
                 },
                 inlineAI: {
                     class: inlineAI,
-
-                    config: {
-                        buttonHTML: `<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 4V20M17 12V20M6 20H10M15 20H19M13 7V4H3V7M21 14V12H13V14" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>`
-                    }
                 },
 
     //             template: {
