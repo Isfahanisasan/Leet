@@ -35,7 +35,8 @@ const Editor = forwardRef((props, ref) => {
             tools: {
                 paragraph: {
                     class: Paragraph,
-                    inlineToolbar: true
+                    inlineToolbar: true,
+                    enableLineBreaks: true
                 }, 
                 header: {
                     class: Header,
@@ -84,36 +85,6 @@ const Editor = forwardRef((props, ref) => {
                 inlineAI: {
                     class: inlineAI,
                 },
-
-    //             template: {
-    //                 class: TemplateInlineTool,
-    // //                 config: {
-    // //                     buttonHTML: `<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    // //   <path d="M8 4V20M17 12V20M6 20H10M15 20H19M13 7V4H3V7M21 14V12H13V14" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    // //   </svg>`
-    // //                 }
-    //             },
-                // fontFamily: FontFamily,
-                // inlineCode: InlineCode,
-                // code: Code,
-                // image: Image,
-                // link: Link,
-                // raw: Raw,
-                // quote: Quote,
-                // warning: Warning,
-                // checklist: CheckList,
-                // embed: Embed,
-                // interactive: Interactive,
-                // history: History
-                // warning: {
-                //     class: Warning,
-                //     inlineToolbar: true,
-                //     config: {
-                //         titlePlaceHolder: '⭐'
-
-
-                //     }
-                // }
                 alert: {
                     class: Alert, 
                     inlineToolbar: true,
@@ -154,6 +125,7 @@ const Editor = forwardRef((props, ref) => {
             headers: {
                 'Content-Type': 'application/json'
             },
+            // prompt engineering can be done here to add context for the AI model. append other parts of the document to the text
             body: JSON.stringify({ query: text, priority: 1})
         });
 

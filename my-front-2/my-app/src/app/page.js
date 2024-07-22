@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 // import Editor from "@/components/Editor.js";
 import React, { useRef, useEffect, useState } from 'react';
 import editor_template from "@/components/editor_template";
+import edjsHTML from "editorjs-html";
 // import Editor from "@/components/Editor.js";
 
 const Editor = dynamic (() => import("@/components/Editor.js"), {ssr: false});
@@ -37,6 +38,13 @@ export default function Home() {
       fileContent =  JSON.stringify(data, null, 2);
       fileName = 'sap-data.json';
     }
+    else if(format == 'html'){
+      const edjsHTML = require('editorjs-html');
+      const edjsParser = edjsHTML();
+      fileContent = edjsParser.parse(data);
+      fileName = 'sap-data.html';
+  
+    }
 
     const blob = new Blob([fileContent], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -63,6 +71,7 @@ export default function Home() {
             >
               <option value="json" className="bg-red text-red hover:bg-gray-200">JSON</option>
               <option value="markdown" className="bg-red text-black hover:bg-gray-200">MARKDOWN</option>
+              <option value="html" className="bg-red text-black hover:bg-gray-200">HTML</option>
             </select>
             <Button variant="ghost" onClick={handleDownload}>
               <ImportIcon className="w-5 h-5"/>
@@ -72,10 +81,12 @@ export default function Home() {
               <LogInIcon className="w-5 h-5" />
               <span className="sr-only">Login</span>
             </Button>
-            <Button variant="ghost">
-              <InfoIcon className="w-5 h-5" />
-              <span className="sr-only">About</span>
-            </Button>
+            <Link href="/about">
+              <Button variant="ghost">
+                <InfoIcon className="w-5 h-5" />
+                <span className="sr-only">About</span>
+              </Button>
+            </Link>
             <Button className="flex items-center gap-2" onClick={handleClick}>
               <BotIcon className="w-5 h-5" />
               Generate SAP

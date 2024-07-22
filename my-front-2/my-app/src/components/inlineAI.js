@@ -22,7 +22,6 @@ export default class inlineAI {
         return data.response.content;
     }
 
-
     render() {
         this.button = document.createElement('button');
         this.button.type = 'button';
@@ -69,7 +68,6 @@ export default class inlineAI {
                 100% { transform: rotate(360deg); }
             }
         `;
-
 
         document.head.appendChild(style);
 
@@ -121,14 +119,8 @@ export default class inlineAI {
                 this.range.deleteContents();
                 this.range.insertNode(document.createTextNode(response));
                 this.api.inlineToolbar.close();
-            }); 
-
-
-
-
+            });
         };
-    
-    
 
         actionContainer.appendChild(textBox);
         actionContainer.appendChild(submitButton);
