@@ -5,21 +5,18 @@ import dynamic from "next/dynamic";
 import { useRef } from 'react';
 import about_template from "@/components/about_template";
 
-const Editor = dynamic (() => import("@/components/Editor.js"), {ssr: false});
-
+const Editor = dynamic (() => import("@/components/about_editor.js"), {
+  ssr: false,
+});
 export default function About() {
   const editorRef = useRef(null);
 
   const handleEditorLoad = (editor) => {
-    editor.render(about_template);
+    // // editor.readOnly.toggle(true);
     editorRef.current = editor;
 
   };
 
-  if (editorRef.current){
-    editorRef.current.readOnly.toggle(true);
-  }
- 
 
   return (
     (<div className="flex flex-col h-screen">

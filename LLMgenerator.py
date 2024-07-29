@@ -16,13 +16,16 @@ class LLMgenerator:
 
     
     def _initialize_pipeline(self):
+        config = transformers.AutoConfig.from_pretrained(self.model_id)
+        # config.use_flash_attention = True
+        # model = transformers.AutoModelForCausalLM.from_pretrained(self.model_id, config=config)
+
         self.pipeline = transformers.pipeline(
             "text-generation",
             model=self.model_id,
             model_kwargs={"torch_dtype": torch.bfloat16},
             device_map="auto",
         )
-
 
     def set_messages(self, messages):
         self.messages = messages

@@ -8,7 +8,6 @@ import Paragraph from '@editorjs/paragraph';
 import Marker from '@editorjs/marker';
 import editor_template from '@/components/editor_template.js';
 import AIText from '@alkhipce/editorjs-aitext';
-import CustomAITextWrapper from '../components/AItextWrapper';
 import Delimiter from '@editorjs/delimiter';
 import ChangeCase from 'editorjs-change-case';
 import Warning from '@editorjs/warning';
@@ -16,6 +15,7 @@ import Alert from 'editorjs-alert';
 import TemplateInlineTool from 'editorjs-inline-template';
 import inlineAI from '../components/inlineAI';
 import NestedList from '@editorjs/nested-list';
+import about_template from './about_template';
 
 
 // import NoticeTune from 'editorjs-notice';
@@ -25,7 +25,6 @@ const TOC = require('@phigoro/editorjs-toc');
 const EJLaTex = require('editorjs-latex');
 // const FontFamily = require('editorjs-inline-font-family-tool');
 const LLM_END_POINT = "http://localhost:8000/query"
-
 const Editor = forwardRef((props, ref) => {
     const editorRef = useRef(null);
 
@@ -57,13 +56,15 @@ const Editor = forwardRef((props, ref) => {
                     inlineToolbar: true
                 },
                 aiText: {
+                    // if you do not use TypeScript you need to remove "as unknown as ToolConstructable" construction
+                    // type ToolConstructable imported from @editorjs/editorjs package
                     class: AIText, 
                     config: {
                       callback: (text) => {
                         const myResponse = generateResponse(text); 
                         return Promise.resolve(myResponse);
                       },
-                    },
+                    }
                   },
                 Marker: {
                     class: Marker
@@ -95,9 +96,9 @@ const Editor = forwardRef((props, ref) => {
 
                     }
                 }
-
-
             },
+            data: about_template,
+            readOnly: true,
             // tunes: ['noticeTune'],
             autofocus: true,
             onReady: () => {
