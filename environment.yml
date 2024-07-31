@@ -8,7 +8,6 @@ dependencies:
   - scikit-learn
   - fastapi
   - uvicorn
-  - npm
   - pip
   - pip: 
     - -r requirements.txt

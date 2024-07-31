@@ -58,6 +58,7 @@ const Editor = forwardRef((props, ref) => {
                 },
                 aiText: {
                     class: CustomAITextWrapper, 
+                    // class: AIText,
                     config: {
                       callback: (text) => {
                         const myResponse = generateResponse(text); 

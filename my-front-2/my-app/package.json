@@ -31,6 +31,7 @@
     "editorjs-alert": "^1.1.4",
     "editorjs-latex": "^1.0.5",
     "editorjs-notice": "^1.1.1",
+    "editorjs-html": "^1.0.0",
     "lucide-react": "^0.406.0",
     "next": "14.2.4",
     "react": "^18",

@@ -6,6 +6,8 @@ export default class inlineAI {
         this.button = null;
         this.selected_text = null; 
         this.range = null; 
+        this.highlighted = null; 
+        this.accept = false; 
     }
 
     generateResponse = async (text) => {
@@ -40,17 +42,54 @@ export default class inlineAI {
 
         this.selected_text = range.cloneContents();
         this.range = range;
+
+
+
+    }
+
+    highlightSelectedText(selection) {
+        // const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const mark = document.createElement('mark');
+            mark.className = 'cdx-marker';
+            const contents = range.extractContents();
+
+            mark.appendChild(contents);
+
+            range.insertNode(mark);
+
+
+        }
     }
 
     renderActions() {
+        // this.highlightSelectedText();
         const actionContainer = document.createElement('div');
         actionContainer.style = "max-width: 100%; overflow-x: hidden; height: auto; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: left; padding: 10px 10px 10px 10px; box-sizing: border-box; ";
 
         const textBox = document.createElement('input');
         textBox.type = 'text';
         textBox.placeholder = 'Query here...';
-        textBox.style = "flex-grow: 1; margin-right: 10px; height: 40px; padding: 0 10px; box-sizing: border-box; padding: 10px 10px 10px 10px; display: block;";
+        textBox.style = "flex-grow: 1; margin-right: 10px; height: 40px; padding: 0 10px; box-sizing: border-box; padding: 10px 10px 10px 10px; display: block; font-size: 10px !important;";
+        // let selection = window.getSelection();
 
+        textBox.addEventListener('click', () => {
+            const selectedText = this.range.extractContents();
+
+            // Create MARK element
+            const mark = document.createElement('MARK');
+    
+            // Append to the MARK element selected TextNode
+            mark.appendChild(selectedText);
+    
+            // Insert new element
+            this.range.insertNode(mark);
+
+            this.highlighted = mark;
+
+
+        });
 
         const submitButton = document.createElement('button');
         submitButton.innerHTML = 'Submit';
@@ -72,6 +111,7 @@ export default class inlineAI {
         document.head.appendChild(style);
 
         submitButton.onclick = async () => {
+
             // make the drop down window to be a spinning wheeel 
             loadingSpinner.style.display = 'block';
             submitButton.style.display = 'none';
@@ -84,6 +124,7 @@ export default class inlineAI {
             const responseDev = document.createElement('div');
             responseDev.textContent = response;
             responseDev.style.marginTop = '10px';
+            responseDev.style.fontSize = '10px';
             actionContainer.appendChild(responseDev);
 
             const acceptButton = document.createElement('button');
@@ -116,10 +157,12 @@ export default class inlineAI {
 
             acceptButton.addEventListener('click', () => {
                 // Replace the selected text 
+                this.accept = true; 
                 this.range.deleteContents();
                 this.range.insertNode(document.createTextNode(response));
-                this.api.inlineToolbar.close();
+                // this.api.inlineToolbar.close();
             });
+
         };
 
         actionContainer.appendChild(textBox);
@@ -128,8 +171,26 @@ export default class inlineAI {
 
         return actionContainer;
     }
+    // removeHighlight() {
+    //     if (this.highlightedElement) {
+    //         const parent = this.highlightedElement.parentNode;
+    //         while (this.highlightedElement.firstChild) {
+    //             parent.insertBefore(this.highlightedElement.firstChild, this.highlightedElement);
+    //         }
+    //         parent.removeChild(this.highlightedElement);
+    //         this.highlightedElement = null; // Clear the reference
+    //     }
+    // }
 
     static get isInline(){
         return true;
     }
+
+    clear() {
+        if (this.range && !this.accept) {
+            this.range.deleteContents();
+            this.range.insertNode(this.selected_text);
+        }
+    }
+
 }

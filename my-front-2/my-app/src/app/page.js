@@ -62,7 +62,7 @@ export default function Home() {
         <div className="container mx-auto flex items-center justify-between">
           <Link href="#" className="flex items-center gap-2" prefetch={false}>
             <img src="https://upload.wikimedia.org/wikipedia/en/5/50/Edwards_Lifesciences_logo.png" alt="Edwards Lifesciences" width={40} height={40} />
-            <span className="text-xl font-bold">AI-powered SAP Generation</span>
+            <span className="text-xl font-bold">AI-powered SAP Assistant</span>
           </Link>
           <div className="flex items-center gap-4">
             <select value={format}

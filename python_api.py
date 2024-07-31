@@ -48,7 +48,7 @@ class QueryRequestSchema(BaseModel):
 # one for each solution
 @app.post("/query")
 async def handle_query(request: QueryRequestSchema):
-    print(request)
+    # print(request)
     async with condition: 
         queue.push(request, request.priority)
         condition.notify()

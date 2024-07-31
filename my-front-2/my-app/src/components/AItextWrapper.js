@@ -27,14 +27,14 @@ class CustomAITextWrapper extends AIText {
 
     }    
 
-    onKeyUp(e) {
-        if (this._element && this._element.querySelector('#ai-suggestions')) {
-            // focus on the suggestion and not the input query 
-            if (e.code === 'Escape'){
-                this._element.querySelector('#ai-suggestions').remove();
-            }
-        }
-    }
+    // onKeyUp(e) {
+    //     if (this._element && this._element.querySelector('#ai-suggestions')) {
+    //         // focus on the suggestion and not the input query 
+    //         if (e.code === 'Escape'){
+    //             this._element.querySelector('#ai-suggestions').remove();
+    //         }
+    //     }
+    // }
 
     drawView(){
         const elem = super.drawView();
@@ -68,6 +68,22 @@ class CustomAITextWrapper extends AIText {
             top: 10px; 
             right: 10px;
         `;
+
+
+    //     queryButton.style = `
+    //     position: absolute; 
+    //     top: 10px; 
+    //     right: 10px; 
+    //     width: 80px; 
+    //     height: 40px; 
+    //     border-radius: 20px; 
+    //     background-color: #007bff; 
+    //     color: white; 
+    //     border: none; 
+    //     cursor: pointer; 
+    //     box-sizing: border-box;
+    // `;
+    
 
         queryButton.tabIndex = -1; 
 
@@ -113,8 +129,14 @@ class CustomAITextWrapper extends AIText {
         loaderElement.style.width = '24px'
         loaderElement.style.height = '24px'
         loaderElement.style.paddingLeft = '4px'
-        loaderElement.style.color = 'lightgray'
-        loaderElement.style.position = 'absolute'
+        loaderElement.style.color = 'gray'
+        // loaderElement.style.position = 'absolute'
+        // I want the loader to have its own space 
+        // loaderElement.style.position = 'relative'; // Ensure it is positioned relative to its container
+        // loaderElement.style.marginLeft = '10px'; // Add margin to the left to create space
+        // loaderElement.style.marginRight = '10px'; // Add margin to the right to create space
+        // loaderElement.style.display = 'inline-block'; // Ensure it is treated as an inline-block element
+
     
         loaderElement.animate(
           [
@@ -130,8 +152,15 @@ class CustomAITextWrapper extends AIText {
             iterations: Infinity
           }
         )
+
+        // replace the query button with the loader
+        this.queryAIButton.replaceWith(loaderElement);
+        
+        // this._element?.querySelector('button').remove();
+
+
     
-        this._element?.appendChild(loaderElement)
+        // this._element?.appendChild(loaderElement)
     
         this.callback?.(content)
           .then((response) => {
@@ -146,7 +175,7 @@ class CustomAITextWrapper extends AIText {
             this._element?.querySelector('#ai-suggestions-loader')?.remove();
 
             //remove the query AI button 
-            this._element?.querySelector('button').remove();
+            // this._element?.querySelector('button').remove();
             // add a button to accept and modify the text
             const acceptButton = document.createElement('button');
             acceptButton.innerText = 'Accept';
@@ -165,6 +194,7 @@ class CustomAITextWrapper extends AIText {
                 margin-bottom: 10px;
                 top: 10px; 
                 right: 10px;
+                display: block;
             `;
 
             // add a button decline that opens up a new Ai text block 
@@ -185,6 +215,7 @@ class CustomAITextWrapper extends AIText {
                 margin-bottom: 10px;
                 top: 10px; 
                 right: 10px;
+                display: block;
             `;
             // when accept button is clicked, replace the text with the AI generated text
             acceptButton.addEventListener('click', () => {
@@ -200,8 +231,6 @@ class CustomAITextWrapper extends AIText {
                 // remove the decline button too 
                 declineButton.remove();
                 this._element?.querySelector('.ce-paragraph').remove();
-
-
                 return;
 
 

@@ -42,7 +42,7 @@ class LLMgenerator:
 
         outputs = self.pipeline(
             self.messages,
-            max_new_tokens=100,
+            # max_new_tokens=100,
             eos_token_id=terminators,
             # uses schotastic sampling, no greedy 
             do_sample=True,

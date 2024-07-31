@@ -13,7 +13,7 @@ const about_template = {
         "id": "r_ULXPuQEM",
         "type": "paragraph",
         "data": {
-          "text": "Welcome to our Statistical Analysis Plan (SAP) Generation Tool.&nbsp;"
+          "text": "Welcome to our Statistical Analysis Plan (SAP) Assistant.&nbsp;"
         }
       },
       {
