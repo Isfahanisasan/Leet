@@ -10,7 +10,7 @@ import edjsHTML from "editorjs-html";
 // import Editor from "@/components/Editor.js";
 
 const Editor = dynamic (() => import("@/components/Editor.js"), {ssr: false});
-
+const StickyNotes = dynamic(() => import("@/components/sticky-notes.js"), {ssr: false});
 
 export default function Home() {
   const editorRef = useRef(null);
@@ -57,7 +57,7 @@ export default function Home() {
 
 
   return (
-    (<div className="flex flex-col h-screen">
+    (<div className="">
       <header className="bg-primary text-primary-foreground py-4 px-6">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="#" className="flex items-center gap-2" prefetch={false}>
@@ -94,14 +94,18 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <div className="flex-1 overflow-auto ">
         <div className="container mx-auto max-w-[8.5in] w-[8.5in] h-[11in]">
           <div
             className="bg-background text-foreground rounded-lg shadow-lg p-6 min-h-[500px] h-full overflow-auto typography" >
             <Editor ref={editorRef} onLoad={handleEditorLoad}/>
           </div>
         </div>
-      </div>
+
+
+        <StickyNotes />
+
+
+
     </div>)
   );
 };

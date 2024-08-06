@@ -224,14 +224,19 @@ class CustomAITextWrapper extends AIText {
 
                 if(!aiSuggestion) return;
 
-                const aiSuggestionTextNode = document.createTextNode(aiSuggestion);
-                this._element?.replaceChild(aiSuggestionTextNode, aiSuggestionElement);
-                // also remove the query and accept button 
-                acceptButton.remove();
-                // remove the decline button too 
-                declineButton.remove();
-                this._element?.querySelector('.ce-paragraph').remove();
-                return;
+                // const aiSuggestionTextNode = document.createTextNode(aiSuggestion);
+                // this._element?.replaceChild(aiSuggestionTextNode, aiSuggestionElement);
+                // // also remove the query and accept button 
+                // acceptButton.remove();
+                // // remove the decline button too 
+                // declineButton.remove();
+                // this._element?.querySelector('.ce-paragraph').remove();
+                // return;
+
+                // remove the ai text block and eplace it with a paragraph populated with the AI suggestion
+                const currentBlockIndex = this.api.blocks.getCurrentBlockIndex();
+                this.api.blocks.delete(currentBlockIndex);
+                this.api.blocks.insert('paragraph', {text: aiSuggestion}, null, currentBlockIndex);
 
 
             });

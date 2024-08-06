@@ -16,7 +16,7 @@ import Alert from 'editorjs-alert';
 import TemplateInlineTool from 'editorjs-inline-template';
 import inlineAI from '../components/inlineAI';
 import NestedList from '@editorjs/nested-list';
-
+import AiBlockTune from '../components/ai_block_tune';
 
 // import NoticeTune from 'editorjs-notice';
 
@@ -38,7 +38,8 @@ const Editor = forwardRef((props, ref) => {
                 paragraph: {
                     class: Paragraph,
                     inlineToolbar: true,
-                    enableLineBreaks: true
+                    enableLineBreaks: true,
+                    tunes: ['AiBlockTune']
                 }, 
                 header: {
                     class: Header,
@@ -77,7 +78,7 @@ const Editor = forwardRef((props, ref) => {
                     class: Delimiter
                 }, 
                 // noticeTune: NoticeTune,
-                ChangeCase: {
+                "Change Case": {
                     class: ChangeCase,
                     config: {
                         showLocaleOption: false
@@ -95,11 +96,12 @@ const Editor = forwardRef((props, ref) => {
                         messagePlaceHolder: 'Enter a message'
 
                     }
+                }, 
+                AiBlockTune: {
+                    class: AiBlockTune
                 }
-
-
             },
-            // tunes: ['noticeTune'],
+            // tunes: ['AiBlockTune'],
             autofocus: true,
             onReady: () => {
                 console.log('Editor.js is ready to use');
