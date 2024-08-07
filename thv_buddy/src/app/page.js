@@ -96,16 +96,12 @@ export default function Home() {
       </header>
         <div className="container mx-auto max-w-[8.5in] w-[8.5in] h-[11in]">
           <div
-            className="bg-background text-foreground rounded-lg shadow-lg p-6 min-h-[500px] h-full overflow-auto typography" >
+            className="bg-background text-background rounded-lg shadow-lg p-6 min-h-[500px] h-full overflow-auto typography" >
             <Editor ref={editorRef} onLoad={handleEditorLoad}/>
           </div>
         </div>
 
-
-        <StickyNotes />
-
-
-
+        <StickyNotes className="relative z-100"/>
     </div>)
   );
 };
