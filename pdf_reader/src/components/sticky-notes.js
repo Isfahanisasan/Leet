@@ -9,7 +9,7 @@ export default function StickyNotes() {
     const [noteWindowPosition, setNoteWindowPosition] = useState({
         width: 300, 
         height: 400,
-        x: 1290,
+        x: 1050,
         y: -1050, 
     });
     const [notes, setNotes] = useState('');
@@ -82,22 +82,22 @@ export default function StickyNotes() {
                 <div>
 
                 { isSmall ? (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => handleNoteWindowResize({ width: 600, height: 800})}
-                                  >
-                                    <MaximizeIcon className="w-5 h-5" />
-                                    <span className="sr-only">Maximize</span>
-                                </Button> ): (
                                   <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => handleNoteWindowResize({ width: 300, height: 400})}
-                                  >
-                                    <MinimizeIcon className="w-5 h-5" />
-                                    <span className="sr-only">Minimize</span>
-                                  </Button>
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleNoteWindowResize({ width: 600, height: 800})}
+                                >
+                                  <MaximizeIcon className="w-5 h-5" />
+                                  <span className="sr-only">Maximize</span>
+                                </Button> ): (
+                                                  <Button
+                                                  variant="ghost"
+                                                  size="icon"
+                                                  onClick={() => handleNoteWindowResize({ width: 300, height: 400})}
+                                                >
+                                                  <MinimizeIcon className="w-5 h-5" />
+                                                  <span className="sr-only">Minimize</span>
+                                                </Button>
                                 )
 
                 }
