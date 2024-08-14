@@ -6,14 +6,17 @@ import { Button } from "@/components/ui/button";
 // import Editor from "@/components/Editor.js";
 import React, { useRef, useEffect, useState } from 'react';
 
-import { Widget, addResponseMessage } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
-import { useTesseract } from 'react-tesseract';
 
-// import PdfViewer from "@/components/pdf_viewer";
-// import Editor from "@/components/Editor.js";
+let Widget, addResponseMessage;
 
-const Editor = dynamic (() => import("@/components/Editor.js"), {ssr: false});
+if (typeof window !== "undefined") {
+  import('react-chat-widget').then(module => {
+    Widget = module.Widget;
+    addResponseMessage = module.addResponseMessage;
+  });
+}
+
 const StickyNotes = dynamic(() => import("@/components/sticky-notes.js"), {ssr: false});
 const PdfViewer = dynamic(() => import("@/components/pdf_viewer.js"), {ssr: false});
 
@@ -78,11 +81,11 @@ export default function Home() {
             {pdfFile && <PdfViewer pdfFile={pdfFile} onTextSelect={handleTextSelection} />}
  
             <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000, opacity: 1, color: "black"}}>
-            <Widget
+            {Widget && <Widget
             handleNewUserMessage={(message) => {
               console.log(`New message: ${message}`);
             }} title="THV Buddy" subtitle="How can I help you today?"
-          />
+          />}
         </div>
       
 
