@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -22,8 +22,6 @@ const PdfViewer = dynamic(() => import("@/components/pdf_viewer.js"), {ssr: fals
 
 export default function Home() {
   const [pdfFile, setPdfFile] = useState(null);
-
-  const { recognize, error, result, isRecognizing } = useTesseract();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

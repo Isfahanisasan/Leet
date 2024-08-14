@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ const MyPdfViewer = ({ pdfFile, onTextSelect }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [isTextLayer, setIsTextLayer] = useState(false);
+  const [ocrPdfFile, setOcrPdfFile] = useState(null);
   
 
 
@@ -21,8 +23,45 @@ const MyPdfViewer = ({ pdfFile, onTextSelect }) => {
   const goToNextPage = () => setPageNumber(pageNumber + 1);
 
 
+  const performOCR = async (file) => {
+    try {
+      // Fetch the file data from the URL 
+      const fileResponse = await fetch(file);
+      const fileBlob = await fileResponse.blob();
+
+      //create a new file object 
+      const newFile = new File([fileBlob], "file.pdf", { type: "application/pdf" });
+
+      // Create a new FormData object
+      const formData = new FormData();
+      formData.append("file", newFile);
+
+      const response = await fetch("http://localhost:8000/ocr", {
+        method: "POST",
+        body: formData
+      });
+
+      console.log(response.body);
+      // body is a readable stream, so we need to convert it to JSON
+      const blob = await response.blob();
+      const ocrPdfUrl = URL.createObjectURL(blob);
+
+      setOcrPdfFile(ocrPdfUrl);
+    } catch (error) {
+      console.error();
+    }
+
+  };
+
+
+
   useEffect(() => {
 
+
+    if (pdfFile) {
+
+      performOCR(pdfFile);
+    }
 
     const handleMouseUp = (event) => {
       const selectedText = window.getSelection().toString();
@@ -58,7 +97,7 @@ const MyPdfViewer = ({ pdfFile, onTextSelect }) => {
               </Button>
       </div>
       <Document
-        file={pdfFile}
+        file={ocrPdfFile}
         onLoadSuccess={onDocumentLoadSuccess}
       >
         <Page pageNumber={pageNumber} />
