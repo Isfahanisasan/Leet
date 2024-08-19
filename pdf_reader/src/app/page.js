@@ -16,7 +16,7 @@ if (typeof window !== "undefined") {
     addResponseMessage = module.addResponseMessage;
   });
 }
-
+const MySidebar = dynamic(() => import("@/components/sidebar.js"), {ssr: false});
 const StickyNotes = dynamic(() => import("@/components/sticky-notes.js"), {ssr: false});
 const PdfViewer = dynamic(() => import("@/components/pdf_viewer.js"), {ssr: false});
 
@@ -25,12 +25,43 @@ const PdfViewer = dynamic(() => import("@/components/pdf_viewer.js"), {ssr: fals
 
 export default function Home() {
   const [pdfFile, setPdfFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  // const [fileName, setFilename] = useState(null);
+  const [ocrPdfFile, setOcrPdfFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFileChange = (event) => {
+  const performOCR = async (file, fileName) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("http://localhost:8000/ocr", {
+        method: "POST",
+        body: formData
+      });
+
+      const blob = await response.blob();
+      const ocrPdfUrl = URL.createObjectURL(blob);
+      return ocrPdfUrl;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleFileChange = async (event) => {
+    setIsLoading(true);
     const file = event.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
       setPdfFile(fileURL);
+      setUploadedFile(fileURL);
+      try {
+        const fileURL = await performOCR(file, file.name);
+        setOcrPdfFile(fileURL);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -47,7 +78,7 @@ export default function Home() {
         <div className="container mx-auto flex items-center justify-between">
           <Link href="#" className="flex items-center gap-2" prefetch={false}>
             <img src="https://upload.wikimedia.org/wikipedia/en/5/50/Edwards_Lifesciences_logo.png" alt="Edwards Lifesciences" width={40} height={40} />
-            <span className="text-xl font-bold">THV Buddy</span>
+            <span className="text-xl font-bold">PDF Reader</span>
           </Link>
           <div className="flex items-center gap-4">
             
@@ -75,19 +106,22 @@ export default function Home() {
           </div>
         </div>
       </header>
-        <div className="container mx-auto max-w-[8.5in] w-[8.5in] h-[11in]">
-          <div
-            className="bg-background text-background rounded-lg shadow-lg p-6 min-h-[500px] h-full overflow-auto typography" >
-            {pdfFile && <PdfViewer pdfFile={pdfFile} onTextSelect={handleTextSelection} />}
- 
-            <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000, opacity: 1, color: "black"}}>
-            {Widget && <Widget
-            handleNewUserMessage={(message) => {
-              console.log(`New message: ${message}`);
-            }} title="THV Buddy" subtitle="How can I help you today?"
-          />}
-        </div>
+        <div className="flex">
+          {uploadedFile && <MySidebar uploadedFile={ocrPdfFile}/>}
+
+          <div className="container mx-auto max-w-[8.5in] w-[8.5in] h-[11in]">
+            <div
+              className="bg-background text-background rounded-lg shadow-lg p-6 min-h-[500px] h-full overflow-auto typography" >
+              {pdfFile && <PdfViewer ocrFile={ocrPdfFile} onTextSelect={handleTextSelection} isLoading={isLoading}/>}
       
+              <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000, opacity: 1, color: "black"}}>
+              {Widget && <Widget
+              handleNewUserMessage={(message) => {
+                console.log(`New message: ${message}`);
+              }} title="THV Buddy" subtitle="How can I help you today?"
+            />}
+          </div>
+        </div>
 
           </div>
         </div>

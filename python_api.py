@@ -8,7 +8,7 @@ from LLMgenerator import LLMgenerator
 from fastapi.middleware.cors import CORSMiddleware
 import ocrmypdf
 import tempfile
-import io
+import os
 
 app = FastAPI() 
 
@@ -74,28 +74,36 @@ app.add_middleware(
 @app.post("/ocr")
 async def handle_ocr(file: UploadFile = File(...)):
     try: 
-        with tempfile.NamedTemporaryFile(delete=True) as input_pdf:
+        with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as input_pdf:
             input_pdf.write(await file.read())
             print(f"PDF saved to {input_pdf.name}")
-            print(f"received data is {file}")
             input_pdf_name = input_pdf.name
+            print(file)
 
-            # Create a temp file for the OCRed PDF
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as output_pdf:
-                output_pdf_name = output_pdf.name
 
-                # Run OCR on the input PDF and skip text 
-                ocrmypdf.ocr(input_pdf_name, output_pdf_name, deskew=True, skip_text=True)
+            ocr_filename = f"ocr_{file.filename}"
+            ocr_filepath = os.path.join(tempfile.gettempdir(), ocr_filename)
+            
+            ocrmypdf.ocr(input_pdf_name, ocr_filepath, deskew=True, skip_text=True, jobs=4)
 
-                print(f"OCRed PDF saved to {output_pdf_name}")
-                return FileResponse(output_pdf_name, media_type="application/pdf", filename="OCRed.pdf")
+            print(f"OCRed PDF saved to {ocr_filepath}")
+            return FileResponse(ocr_filepath, media_type="application/pdf", filename=ocr_filename)
             
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
 
+@app.get("/getFiles")
+async def get_files():
+    # only the files that start with "ocr_" and end with ".pdf"
+    files = [f for f in os.listdir(tempfile.gettempdir()) if f.startswith("ocr_") and f.endswith(".pdf")]
+    print(files)
+    return files
+
+    
+
 if __name__ == "__main__":
     import uvicorn 
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
