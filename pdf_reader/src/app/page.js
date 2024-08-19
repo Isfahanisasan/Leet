@@ -56,6 +56,21 @@ export default function Home() {
       setPdfFile(fileURL);
       setUploadedFile(fileURL);
       try {
+        // check if the file is already been uploaded and processed by checking if ocr_ + filename exists in the server by getFiles endpoint
+        const response = await fetch("http://localhost:8000/getFiles");
+        const data = await response.json();
+        const fileName = file.name;
+        const ocrFileName = "ocr_" + fileName;
+        if (data.includes(ocrFileName)) {
+          console.log("File already uploaded and processed");
+          const fileURL = await fetch(`http://localhost:8000/getFile/${ocrFileName}`);
+          const pdfData = await fileURL.blob();
+          const pdfUrl = URL.createObjectURL(pdfData);
+          setOcrPdfFile(pdfUrl);
+          setIsLoading(false);
+          return;
+        }
+
         const fileURL = await performOCR(file, file.name);
         setOcrPdfFile(fileURL);
         setIsLoading(false);
@@ -71,6 +86,20 @@ export default function Home() {
       console.log(selectedText);
     }
   };
+
+  const handleFileSelect = async (file) => {
+    setIsLoading(true);
+    try {
+      const fileURL = await fetch(`http://localhost:8000/getFile/${file}`);
+      const pdfData = await fileURL.blob();
+      const pdfUrl = URL.createObjectURL(pdfData);
+      setOcrPdfFile(pdfUrl);
+      setIsLoading(false);
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
     
   return (
     (<div className="">
@@ -107,7 +136,7 @@ export default function Home() {
         </div>
       </header>
         <div className="flex">
-          {uploadedFile && <MySidebar uploadedFile={ocrPdfFile}/>}
+          {uploadedFile && <MySidebar uploadedFile={ocrPdfFile} onFileSelect={handleFileSelect}/>}
 
           <div className="container mx-auto max-w-[8.5in] w-[8.5in] h-[11in]">
             <div

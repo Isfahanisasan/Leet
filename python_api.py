@@ -101,6 +101,14 @@ async def get_files():
     print(files)
     return files
 
+
+@app.get("/getFile/{filename}")
+async def get_file(filename: str):
+    filepath = os.path.join(tempfile.gettempdir(), filename)
+    print(filepath)
+    return FileResponse(filepath, media_type="application/pdf", filename=filename)
+    
+
     
 
 if __name__ == "__main__":
