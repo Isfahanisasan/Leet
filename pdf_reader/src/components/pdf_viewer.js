@@ -13,6 +13,8 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [ocrPdfFile, setOcrPdfFile] = useState(null);
+  const [isInputVisible, setIsInputVisible] = useState(false);
+  const [inputPageNumber, setInputPageNumber] = useState(pageNumber);
   // const [isLoading, setIsLoading] = useState(true);
 
 
@@ -24,6 +26,13 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
 
   const goToPrevPage = () => setPageNumber(pageNumber - 1);
   const goToNextPage = () => setPageNumber(pageNumber + 1);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= numPages) {
+      setPageNumber(page);
+      setInputPageNumber(page);
+    }
+  };
 
 
   useEffect(() => {
@@ -45,6 +54,22 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
   }, [onTextSelect, isLoading]);
 
 
+  const handlePageNumberClick = () => {
+    setIsInputVisible(true);
+  };
+
+
+  const handleInputChange = (event) => {
+    setInputPageNumber(event.target.value);
+  };
+
+
+  const handleInputSubmit = (event) => {
+    event.preventDefault();
+    goToPage(Number(inputPageNumber));
+    setIsInputVisible(false);
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -59,9 +84,37 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
               <ChevronLeftIcon className="w-5 h-5 mr-2" />
               Previous
             </Button>
-            <Button variant disabled={true}>
-              Page {pageNumber} of {numPages}
-            </Button>
+
+            {isInputVisible ? (
+          <Button variant >
+            Page
+          <form onSubmit={handleInputSubmit}>
+            <input
+              type="number"
+              value={inputPageNumber}
+              onChange={handleInputChange}
+              onBlur={handleInputSubmit}
+              autoFocus
+              style = {{width: '3em', marginLeft: '0.5em', marginRight: '0.5em'}}
+            />
+          </form>
+          of {numPages}
+        </Button>
+        ) : (
+          <Button variant  onClick={handlePageNumberClick}>
+          Page {pageNumber} of {numPages}
+          </Button>
+        )
+        }
+            
+
+
+
+
+
+
+
+
             <Button variant="outline" onClick={goToNextPage} disabled={pageNumber === numPages}>
               Next
               <ChevronRightIcon className="w-5 h-5 ml-2" />
@@ -122,8 +175,3 @@ function ChevronRightIcon(props) {
 
 
 export default MyPdfViewer;
-
-
-
-
-

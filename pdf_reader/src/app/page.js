@@ -5,10 +5,14 @@ import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 // import Editor from "@/components/Editor.js";
 import React, { useRef, useEffect, useState } from 'react';
+import llamaDataURI from "@/components/llamaURI.js";
+
 
 import 'react-chat-widget/lib/styles.css';
+// import 'noun-llama-4694765.svg' from '@/assets/noun-llama-4694765.svg';
 
 let Widget, addResponseMessage;
+
 
 if (typeof window !== "undefined") {
   import('react-chat-widget').then(module => {
@@ -26,6 +30,7 @@ const PdfViewer = dynamic(() => import("@/components/pdf_viewer.js"), {ssr: fals
 export default function Home() {
   const [pdfFile, setPdfFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [uplodedFileName, setUploadedFileName] = useState(null)
   // const [fileName, setFilename] = useState(null);
   const [ocrPdfFile, setOcrPdfFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +60,7 @@ export default function Home() {
       const fileURL = URL.createObjectURL(file);
       setPdfFile(fileURL);
       setUploadedFile(fileURL);
+
       try {
         // check if the file is already been uploaded and processed by checking if ocr_ + filename exists in the server by getFiles endpoint
         const response = await fetch("http://localhost:8000/getFiles");
@@ -68,12 +74,14 @@ export default function Home() {
           const pdfUrl = URL.createObjectURL(pdfData);
           setOcrPdfFile(pdfUrl);
           setIsLoading(false);
+          setUploadedFileName(ocrFileName);
           return;
         }
 
         const fileURL = await performOCR(file, file.name);
         setOcrPdfFile(fileURL);
         setIsLoading(false);
+        setUploadedFileName(ocrFileName);
       } catch (error) {
         console.error(error);
       }
@@ -94,12 +102,19 @@ export default function Home() {
       const pdfData = await fileURL.blob();
       const pdfUrl = URL.createObjectURL(pdfData);
       setOcrPdfFile(pdfUrl);
+      setUploadedFileName(file);
       setIsLoading(false);
     }
     catch (error) {
       console.error(error);
     }
   }
+
+  const handleNewUserMessage = (newMessage) => {
+    console.log(`New message incoming! ${newMessage}`);
+    addResponseMessage("I am a smart Llama");
+    // Now send the message throught the backend API
+  };
     
   return (
     (<div className="">
@@ -136,18 +151,16 @@ export default function Home() {
         </div>
       </header>
         <div className="flex">
-          {uploadedFile && <MySidebar uploadedFile={ocrPdfFile} onFileSelect={handleFileSelect}/>}
+          {<MySidebar uploadedFile={ocrPdfFile} onFileSelect={handleFileSelect} uploadedFileName={uplodedFileName}/>}
 
           <div className="container mx-auto max-w-[8.5in] w-[8.5in] h-[11in]">
             <div
               className="bg-background text-background rounded-lg shadow-lg p-6 min-h-[500px] h-full overflow-auto typography" >
-              {pdfFile && <PdfViewer ocrFile={ocrPdfFile} onTextSelect={handleTextSelection} isLoading={isLoading}/>}
+              {<PdfViewer ocrFile={ocrPdfFile} onTextSelect={handleTextSelection} isLoading={isLoading}/>}
       
               <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000, opacity: 1, color: "black"}}>
               {Widget && <Widget
-              handleNewUserMessage={(message) => {
-                console.log(`New message: ${message}`);
-              }} title="THV Buddy" subtitle="How can I help you today?"
+              handleNewUserMessage={handleNewUserMessage} title="Ask Llama" subtitle="How can I help you today?"  profileAvatar={llamaDataURI}
             />}
           </div>
         </div>
@@ -267,3 +280,17 @@ function UploadIcon(props) {
     </svg>
   )
 }
+
+const llamaLogoComponent = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 40"
+    x="0px"
+    y="0px"
+    {...props}
+  >
+    <g data-name="Layer 14">
+      <path d="M20.369,5.268l.98047-1.274,4.24081.3032.61162.88635L23.5744,6.40981Zm2.9845,1.67695L20.18227,5.81549l.2673,9.74233,5.77129,1.24487ZM20.466,16.15354l.199,7.254,3.49932.10259,2.09045-6.108Zm.4178-14.23616L20.11267,3.28l.03639,1.3245.77414-1.00583ZM9.53594,17.14807,8.154,20.426l4.57835,2.60463,1.62141-6.38171ZM8.077,25.968H9.92654l2.5144-2.43738L8.077,21.048ZM6.66683,19.21036l1.2891.19555.8017-1.90144ZM8.2055,26.54685l1.33044,3.53577h1.23625l-.9503-3.53577Zm6.76157-9.96123-1.67766,6.60563,6.79613.19933-.20088-7.31427Zm5.88109,13.497h1.06667L23.968,24.08374l-3.28706-.09638Z" />
+    </g>
+  </svg>
+);
