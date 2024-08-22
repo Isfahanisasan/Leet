@@ -10,7 +10,7 @@ const MySidebar = ( { uploadedFile, onFileSelect, uploadedFileName } ) => {
     useEffect(() => {
         const fetchPdfFiles = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:8000/getFiles");
+                const response = await fetch("http://127.0.0.1:7000/getFiles");
                 const data = await response.json();
                 setPdfFiles(data);
             }

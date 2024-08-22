@@ -8,10 +8,11 @@ from huggingface_hub import login
 login("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")
 
 class LLMgenerator: 
-    def __init__(self, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
+    def __init__(self, device="auto", model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
         self.model_id = model_id
         self.pipeline = None
         self.messages = []
+        self.device = device 
         self._initialize_pipeline()
 
     
@@ -24,7 +25,7 @@ class LLMgenerator:
             "text-generation",
             model=self.model_id,
             model_kwargs={"torch_dtype": torch.bfloat16},
-            device_map="auto",
+            device_map=self.device,
         )
 
     def set_messages(self, messages):
@@ -42,7 +43,7 @@ class LLMgenerator:
 
         outputs = self.pipeline(
             self.messages,
-            # max_new_tokens=100,
+            max_new_tokens= 10000,
             eos_token_id=terminators,
             # uses schotastic sampling, no greedy 
             do_sample=True,

@@ -9,7 +9,7 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.mjs`;
 
 
-const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
+const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading, pageChange}) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [ocrPdfFile, setOcrPdfFile] = useState(null);
@@ -24,12 +24,13 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
   };
 
 
-  const goToPrevPage = () => setPageNumber(pageNumber - 1);
-  const goToNextPage = () => setPageNumber(pageNumber + 1);
+  const goToPrevPage = () => goToPage(pageNumber - 1);
+  const goToNextPage = () => goToPage(pageNumber + 1);
 
   const goToPage = (page) => {
     if (page >= 1 && page <= numPages) {
       setPageNumber(page);
+      pageChange(page);
       setInputPageNumber(page);
     }
   };
@@ -52,6 +53,11 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [onTextSelect, isLoading]);
+
+
+  useEffect(() => {
+    goToPage(1);
+  }, [ocrFile]);
 
 
   const handlePageNumberClick = () => {
@@ -106,15 +112,6 @@ const MyPdfViewer = ({ ocrFile, onTextSelect,  isLoading}) => {
           </Button>
         )
         }
-            
-
-
-
-
-
-
-
-
             <Button variant="outline" onClick={goToNextPage} disabled={pageNumber === numPages}>
               Next
               <ChevronRightIcon className="w-5 h-5 ml-2" />
